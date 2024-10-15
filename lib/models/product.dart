@@ -27,13 +27,13 @@ class Product with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleFavoriteStatus() async {
+  Future<void> toggleFavoriteStatus(String token, String userId) async {
     try {
       _toggleFavorite();
 
-      final response = await http.patch(
-        Uri.parse('${Constants.baseUrl}/$id.json'),
-        body: jsonEncode({"isFavorite": isFavorite}),
+      final response = await http.put(
+        Uri.parse('${Constants.userFavoritesUrl}/$userId/$id.json?auth=$token'),
+        body: jsonEncode(isFavorite),
       );
 
       if (response.statusCode >= 400) {
